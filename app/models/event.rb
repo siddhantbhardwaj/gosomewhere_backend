@@ -10,7 +10,7 @@ class Event < ApplicationRecord
   validates :src_id, uniqueness: true
   
   def self.sync_facebook_events
-    url = 'https://go-somewhere-fb.herokuapp.com/events?lat=44.636585&lng=-63.5938442&distance=1000&sort=venue&accessToken=170931180215481|ZzxArVDyx9Q8VwW7BMNK8dRGZEk'
+    url = 'https://go-somewhere-fb.herokuapp.com/events?lat=44.636585&lng=-63.5938442&distance=1000&sort=venue&accessToken='+ENV['FB_ACCESS_TOKEN']
     res = RestClient.get(url)
     response = JSON.parse(res)
     if response["events"]
