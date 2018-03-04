@@ -21,5 +21,5 @@ class User < ApplicationRecord
     auth_token = User.generate_token(options[:auth_token]) { |auth_token| authentications.where(auth_token: auth_token) }
     authentications.create(auth_token: auth_token)
   end
-  
+
 end
