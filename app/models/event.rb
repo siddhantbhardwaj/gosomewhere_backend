@@ -24,7 +24,8 @@ class Event < ApplicationRecord
           attendees: event['stats']['attending'],
           latitude: event['place']['location']['latitude'],
           longitude: event['place']['location']['longitude'],
-          image: event['coverPicture']
+          image: event['coverPicture'],
+          source: 'facebook'
         }
         if @event.save
           puts @event.title
@@ -36,7 +37,7 @@ class Event < ApplicationRecord
   end
   
   def self.sync_eventbrite_events
-    url = 'https://www.eventbriteapi.com/v3/events/search?location.latitude=44.636585&location.longitude=-63.5938442&location.within=1000km&token='+ENV['EVENTBRITE_TOKEN']
+    url = 'https://www.eventbriteapi.com/v3/events/search?location.latitude=44.636585&location.longitude=-63.5938442&location.within=1000km&expand=venue&token='+ENV['EVENTBRITE_TOKEN']
     res = RestClient.get(url)
     response = JSON.parse(res)
     response["events"].each do |event|
@@ -46,6 +47,11 @@ class Event < ApplicationRecord
         description: event['description']['text'],
         start_at: event['start']["utc"],
         end_at: event['end']["utc"],
+        latitude: event['venue']['latitude'],
+        longitude: event['venue']['longitude'],
+        address: event['venue']['address']['localized_address_display'],
+        image: event['logo']['original']['url'],
+        source: 'eventbrite'
       }
       @event.save
     end
@@ -54,5 +60,6 @@ class Event < ApplicationRecord
   private
   def self.fetch_events
     sync_facebook_events
+    sync_eventbrite_events
   end
 end
