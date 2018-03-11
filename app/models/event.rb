@@ -23,7 +23,8 @@ class Event < ApplicationRecord
           end_at: event['endTime'],
           attendees: event['stats']['attending'],
           latitude: event['place']['location']['latitude'],
-          longitude: event['place']['location']['longitude']
+          longitude: event['place']['location']['longitude'],
+          image: event['coverPicture']
         }
         if @event.save
           puts @event.title
