@@ -20,8 +20,12 @@ class ApplicationController < ActionController::API
     render json: { errors: object.errors.messages, fields: object.errors.keys }, status: :unprocessable_entity, head: :unprocessable_entity
   end
   
-  def not_found
-    render json: { errors: "Record not found" }, status: :not_found, head: :not_found
+  def not_found(model)
+    render json: { errors: "#{model || "Record"} not found" }, status: :not_found, head: :not_found
+  end
+
+  def render_success
+    render json: { success: true }, status: :ok
   end
   
   private

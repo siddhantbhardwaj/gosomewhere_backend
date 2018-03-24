@@ -2,6 +2,9 @@ class Event < ApplicationRecord
   geocoded_by :address
   reverse_geocoded_by :latitude, :longitude
   
+  ## ASSOCIATIONS ##
+  has_many :comments
+  
   ## CALLBACKS ##
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }
   
