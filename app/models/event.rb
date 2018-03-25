@@ -7,6 +7,7 @@ class Event < ApplicationRecord
   
   ## CALLBACKS ##
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }
+  after_validation :reverse_geocode, if: ->(obj){ obj.address.blank? and obj.latitude.present? and obj.longitude.present? }
   
   ## VALIDATIONS ##
   validates :title, :description, :start_at, :end_at, presence: true

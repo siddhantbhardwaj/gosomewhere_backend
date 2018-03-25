@@ -3,13 +3,14 @@ class CommentsController < ApplicationController
   before_action :load_current_user
   
   def index
-    render json: @event.comments
+    @comments = @event.comments
+    render 'comments/index'
   end
   
   def create
     @comment = @current_user.comments.new(comment_params)
     if @comment.save
-      render json: @comment
+      render 'comments/show'
     else
       render_errors(@comment)
     end
@@ -17,8 +18,7 @@ class CommentsController < ApplicationController
   
   def destroy
     @comment = @current_user.comments.find_by_id(params[:id])
-    if @comment
-      @comment.destroy
+    if @comment && @comment.destroy
       render_success
     else
       not_found("Comment")
