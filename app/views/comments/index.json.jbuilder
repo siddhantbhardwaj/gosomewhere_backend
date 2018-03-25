@@ -1,3 +1,3 @@
-json.array!(@events) do |event|
-  json.partial! 'events/show', event: event
+json.array!(@comments) do |comment|
+  json.partial! 'comments/comment', comment: comment
 end

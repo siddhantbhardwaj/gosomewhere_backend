@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   before_action :load_current_user
   
   def index
-    @comments = @event.comments
+    @comments = @event.comments.includes(:user)
     render 'comments/index'
   end
   

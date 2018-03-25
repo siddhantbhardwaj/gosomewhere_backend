@@ -4,6 +4,15 @@ class EventsController < ApplicationController
   
   def index
     @events = Event.where("end_at > ?", Time.zone.now)
-    render json: @events
+    render 'events/index'
+  end
+  
+  def show
+    @event = Event.find_by(id: params[:id])
+    if @event
+      render 'events/show'
+    else
+      not_found
+    end
   end
 end

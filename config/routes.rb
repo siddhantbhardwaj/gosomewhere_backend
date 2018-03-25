@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post '/signin' => 'sessions#create'
   get '/signout' => 'sessions#destroy'
   
-  resources :events, only: [:index] do
+  resources :events, only: [:index, :show] do
     resources :comments
   end
 end
