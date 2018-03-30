@@ -11,4 +11,4 @@ json.created_at event.created_at
 json.updated_at event.updated_at
 json.src_id event.src_id
 json.image event.image
-json.source event.source
+json.source event.source 

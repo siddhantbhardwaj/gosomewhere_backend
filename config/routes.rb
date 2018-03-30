@@ -9,5 +9,7 @@ Rails.application.routes.draw do
   
   resources :events, only: [:index, :show] do
     resources :comments
+    
+    post '/change_attending', to: 'events#change_attending'
   end
 end

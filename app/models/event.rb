@@ -4,6 +4,7 @@ class Event < ApplicationRecord
   
   ## ASSOCIATIONS ##
   has_many :comments
+  has_and_belongs_to_many :users
   
   ## CALLBACKS ##
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }
@@ -12,6 +13,10 @@ class Event < ApplicationRecord
   ## VALIDATIONS ##
   validates :title, :description, :start_at, :end_at, presence: true
   validates :src_id, uniqueness: true
+  
+  def is_user_attending(user)
+    users.exists?(user.id)
+  end
   
   def self.sync_facebook_events
     url = 'https://go-somewhere-fb.herokuapp.com/events?lat=44.636585&lng=-63.5938442&distance=1000&sort=venue&accessToken='+ENV['FB_ACCESS_TOKEN']

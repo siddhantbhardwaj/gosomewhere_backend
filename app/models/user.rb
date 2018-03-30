@@ -4,6 +4,7 @@ class User < ApplicationRecord
   ## ASSOCIATIONS ##
   has_many :authentications
   has_many :comments
+  has_and_belongs_to_many :events
 
   ## VALIDATIONS ##
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
@@ -21,6 +22,10 @@ class User < ApplicationRecord
   def save_token(options = {})
     auth_token = User.generate_token(options[:auth_token]) { |auth_token| authentications.where(auth_token: auth_token) }
     authentications.create(auth_token: auth_token)
+  end
+  
+  def is_attending(event)
+    events.exists?(event.id)
   end
 
 end
