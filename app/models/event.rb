@@ -19,7 +19,7 @@ class Event < ApplicationRecord
   end
   
   def self.sync_facebook_events
-    url = 'https://go-somewhere-fb.herokuapp.com/events?lat=44.636585&lng=-63.5938442&distance=1000&sort=venue&accessToken='+ENV['FB_ACCESS_TOKEN']
+    url = 'https://go-somewhere-fb.herokuapp.com/events?lat=44.636585&lng=-63.5938442&distance=100&sort=venue&accessToken='+ENV['FB_ACCESS_TOKEN']
     res = RestClient.get(url)
     response = JSON.parse(res)
     if response["events"]
@@ -45,8 +45,7 @@ class Event < ApplicationRecord
     end
   end
   
-  def self.sync_eventbrite_events
-    url = 'https://www.eventbriteapi.com/v3/events/search?location.latitude=44.636585&location.longitude=-63.5938442&location.within=1000km&expand=venue&token='+ENV['EVENTBRITE_TOKEN']
+  def self.sync_eventbrite_events(url)
     res = RestClient.get(url)
     response = JSON.parse(res)
     response["events"].each do |event|
@@ -65,10 +64,19 @@ class Event < ApplicationRecord
       @event.save
     end
   end
+
+  def self.sync_eventbrite_events_toronto
+    sync_eventbrite_events('https://www.eventbriteapi.com/v3/events/search?location.latitude=43.653908&location.longitude=-79.384293&location.within=200km&expand=venue&token='+ENV['EVENTBRITE_TOKEN'])
+  end
+
+  def self.sync_eventbrite_events_halifax
+    sync_eventbrite_events('https://www.eventbriteapi.com/v3/events/search?location.latitude=44.651070&location.longitude=-63.582687&location.within=100km&expand=venue&token='+ENV['EVENTBRITE_TOKEN'])
+  end
   
   private
   def self.fetch_events
+    sync_eventbrite_events_toronto
+    sync_eventbrite_events_halifax
     sync_facebook_events
-    sync_eventbrite_events
   end
 end
